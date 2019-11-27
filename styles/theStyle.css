@@ -1,0 +1,23 @@
+
+.button {
+
+	-fx-pref-width: 150px;
+}
+
+
+
+#vBox {
+	-fx-border-style: solid;
+}
+
+#menuBtn {
+	-fx-background-color: gainsboro;
+
+}
+
+#menuBtn:hover {
+	-fx-font: bold italic 10pt "Helvetica";
+	-fx-text-fill: blue;
+	-fx-underline: true;
+
+}
