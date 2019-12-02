@@ -24,6 +24,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    BorderPane root = new BorderPane();
+
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -31,12 +34,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        BorderPane root = new BorderPane();
         root.setPadding(new Insets(10, 10, 10, 10));
 
         root.setTop(topPane());
         root.setLeft(leftPane());
         root.setCenter(middlePane());
+
 
         Scene scene = new Scene(root, 900, 600);
         scene.getStylesheets().add("file:styles/theStyle.css");
@@ -51,7 +54,6 @@ public class Main extends Application {
         HBox top = new HBox();
         top.setAlignment(Pos.TOP_LEFT);
         top.setSpacing(10);
-
 
         Label systemName = new Label("Lagerhanteringssystem");
         systemName.setPadding(new Insets(0, 200, 0,0));
@@ -76,7 +78,8 @@ public class Main extends Application {
 
     public /*VBox*/ GridPane leftPane() { //Om vi väljer att köra med VBOX då är det koden under.
 
-        GridPane root = new GridPane();
+
+        GridPane root1 = new GridPane();
         root.setId("vBox");
         TitledPane product = new TitledPane();
         product.setText("Produkt");
@@ -105,17 +108,22 @@ public class Main extends Application {
         knapparUnderTitledPane.setAlignment(Pos.CENTER);
         knapparUnderTitledPane.setPadding(new Insets(10, 10, 10, 10));
 
-        root.add(dragspel, 0, 0);
-        root.add(knapparUnderTitledPane, 0, 10);
 
-        root.setStyle("-fx-background-color: gainsboro");
+        root1.add(dragspel, 0, 0);
+        root1.add(knapparUnderTitledPane, 0, 10);
+
+        root1.setStyle("-fx-background-color: gainsboro");
+
 
 
         addProduct.setOnAction(event -> {
-            middlePane();
+
+
+            root.setCenter(laggTillProdukt());
+
         });
 
-        return root;
+        return root1;
     }
         /*
         VBox menuLeft= new VBox();
@@ -137,6 +145,16 @@ public class Main extends Application {
         return menuLeft;
         */
 
+        public VBox laggTillProdukt() {
+
+            VBox vBox = new VBox();
+
+            Label test = new Label("TestText");
+
+            vBox.getChildren().add(test);
+
+            return vBox;
+        }
 
         public VBox middlePane() {
             /*
