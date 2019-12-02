@@ -178,6 +178,10 @@ public class Main extends Application {
 
             vBox.getChildren().addAll(rubrik,pane);
 
+            avbryt.setOnAction(event -> {
+                root.setCenter(middlePane());
+            });
+
             return vBox;
         }
 
