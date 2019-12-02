@@ -72,6 +72,12 @@ public class Main extends Application {
 
         top.getChildren().addAll(systemName, buttons, user1);
 
+        home.setOnAction(event -> {
+
+            root.setCenter(middlePane());
+
+        });
+
         return top;
 
     }
@@ -127,6 +133,7 @@ public class Main extends Application {
             root.setCenter(andraProdukt());
 
         });
+
 
         return root1;
     }
