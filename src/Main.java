@@ -130,25 +130,7 @@ public class Main extends Application {
 
         return root1;
     }
-        /*
-        VBox menuLeft= new VBox();
-        menuLeft.setStyle("-fx-background-color: gainsboro");
-        menuLeft.setFillWidth(true);
-
-        Button product = new Button("Produkt");
-        Button addProduct = new Button("Lägg till produkt");
-        Button changeProduct = new Button("Ändra produkt");
-        Button search = new Button("Search");
-
-        product.setMinWidth(menuLeft.getPrefWidth());
-        addProduct.setMinWidth(menuLeft.getPrefWidth());
-        changeProduct.setMinWidth(menuLeft.getPrefWidth());
-        search.setMinWidth(menuLeft.getPrefWidth());
-
-        menuLeft.getChildren().addAll(product, addProduct, changeProduct, search);
-
-        return menuLeft;
-        */
+       
 
         public VBox laggTillProdukt() {
 
@@ -172,30 +154,7 @@ public class Main extends Application {
         }
 
         public VBox middlePane() {
-            /*
-            GridPane root = new GridPane();
 
-            Label rubrik = new Label("Lägg till produkt");
-            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,30));
-
-
-            Label artikelNummer = new Label("Artikelnummer:");
-            Label artikelNamn = new Label("Artikelnamn:");
-            Label antal = new Label("Antal:");
-            Label kategori = new Label("Kategori:");
-            Label lagerPlats = new Label("Lagerplats:");
-
-            root.add(rubrik, 1, 0);
-            root.add(artikelNummer, 0, 1);
-            root.add(artikelNamn, 0, 2);
-            root.add(antal, 0, 3);
-            root.add(kategori, 0, 4);
-            root.add(lagerPlats, 0, 5);
-
-            root.setPadding(new Insets(10, 10, 10, 10));
-            return root;
-
-             */
             VBox vBox = new VBox();
             vBox.setId("vBox");
             Label rubrik = new Label("Välkommen," + "\n" +  "Nils Nilsson!");
