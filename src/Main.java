@@ -22,6 +22,12 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     BorderPane root = new BorderPane();
+    Group buttons = new Group();
+    Button home = new Button("Hem");
+    Button signOut = new Button("Logga ut");
+    Button addProduct = new Button("Lägg till produkt");
+    Button changeProduct = new Button("Ändra produkt");
+    Button search = new Button("Search");
 
 
     public static void main(String[] args) {
@@ -56,10 +62,7 @@ public class Main extends Application {
         systemName.setPadding(new Insets(0, 200, 0,0));
         systemName.setFont(Font.font("Helvetica", FontWeight.BOLD,30));
 
-        Group buttons = new Group();
-        Button home = new Button("Hem");
         home.setLayoutX(-160);
-        Button signOut = new Button("Logga ut");
         buttons.getChildren().addAll(home, signOut);
 
         Image user = new Image("file:images/user1.png");
@@ -70,7 +73,9 @@ public class Main extends Application {
         top.getChildren().addAll(systemName, buttons, user1);
 
         home.setOnAction(event -> {
-
+            addProduct.getStyleClass().remove("active");
+            changeProduct.getStyleClass().remove("active");
+            search.getStyleClass().remove("active");
             root.setCenter(middlePane());
 
         });
@@ -91,8 +96,6 @@ public class Main extends Application {
         VBox produktKnappar = new VBox();
         produktKnappar.setStyle("-fx-background-color: gainsboro");
 
-        Button addProduct = new Button("Lägg till produkt");
-        Button changeProduct = new Button("Ändra produkt");
         produktKnappar.getChildren().addAll(addProduct, changeProduct);
         addProduct.setId("menuBtn");
         changeProduct.setId("menuBtn");
@@ -103,7 +106,6 @@ public class Main extends Application {
         dragspel.getPanes().addAll(product);
 
         VBox knapparUnderTitledPane = new VBox();
-        Button search = new Button("Search");
         search.setMaxWidth(dragspel.getPrefWidth());
         search.setId("menuBtn");
 
@@ -120,18 +122,24 @@ public class Main extends Application {
 
 
         addProduct.setOnAction(event -> {
-
+            changeProduct.getStyleClass().remove("active");
+            search.getStyleClass().remove("active");
+            addProduct.getStyleClass().add("active");
             root.setCenter(laggTillProdukt());
-
         });
 
         changeProduct.setOnAction(event -> {
-
+            addProduct.getStyleClass().remove("active");
+            search.getStyleClass().remove("active");
+            changeProduct.getStyleClass().add("active");
             root.setCenter(andraProdukt());
 
         });
 
         search.setOnAction(event -> {
+            search.getStyleClass().add("active");
+            changeProduct.getStyleClass().remove("active");
+            addProduct.getStyleClass().remove("active");
             root.setCenter(sokProdukt());
         });
 
@@ -144,6 +152,7 @@ public class Main extends Application {
 
             VBox vBox = new VBox();
 
+            vBox.setId("vBox");
 
             GridPane pane = new GridPane();
             pane.setPadding(new Insets(20,10,10,100));
@@ -184,6 +193,8 @@ public class Main extends Application {
         public VBox andraProdukt() {
             VBox vBox = new VBox();
 
+            vBox.setId("vBox");
+
             Label test = new Label("Nu får ni se");
 
             vBox.getChildren().add(test);
@@ -192,13 +203,15 @@ public class Main extends Application {
         }
 
         public VBox sokProdukt() {
-        VBox vBox = new VBox();
+            VBox vBox = new VBox();
 
-        Label sokRuta = new Label("Här kan man söka");
+            vBox.setId("vBox");
 
-        vBox.getChildren().add(sokRuta);
+            Label sokRuta = new Label("Här kan man söka");
 
-        return vBox;
+            vBox.getChildren().add(sokRuta);
+
+            return vBox;
         }
 
         public VBox middlePane() {

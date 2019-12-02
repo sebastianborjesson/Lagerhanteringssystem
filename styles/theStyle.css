@@ -16,8 +16,23 @@
 }
 
 #menuBtn:hover {
-	-fx-font: bold italic 10pt "Helvetica";
+	-fx-font: bold italic 12pt "Helvetica";
 	-fx-text-fill: blue;
 	-fx-underline: true;
 
 }
+
+#menuBtn:pressed {
+	-fx-font: bold italic 12pt "Helvetica";
+	-fx-text-fill: blue;
+	-fx-underline: true;
+
+}
+
+.button.active {
+	-fx-border-color: grey;
+	-fx-background-color: #f8ecc2;
+	-fx-font: bold italic 11pt "Helvetica";
+
+}
+
