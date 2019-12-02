@@ -61,7 +61,6 @@ public class Main extends Application {
         Button home = new Button("Hem");
         home.setLayoutX(-160);
         Button signOut = new Button("Logga ut");
-        //signOut.setLayoutX(400);
         buttons.getChildren().addAll(home, signOut);
 
         Image user = new Image("file:images/user1.png");
