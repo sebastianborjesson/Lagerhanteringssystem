@@ -134,6 +134,10 @@ public class Main extends Application {
 
         });
 
+        search.setOnAction(event -> {
+            root.setCenter(sokProdukt());
+        });
+
 
         return root1;
     }
@@ -158,6 +162,16 @@ public class Main extends Application {
             vBox.getChildren().add(test);
 
             return vBox;
+        }
+
+        public VBox sokProdukt() {
+        VBox vBox = new VBox();
+
+        Label sokRuta = new Label("Här kan man söka");
+
+        vBox.getChildren().add(sokRuta);
+
+        return vBox;
         }
 
         public VBox middlePane() {
