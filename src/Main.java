@@ -118,8 +118,13 @@ public class Main extends Application {
 
         addProduct.setOnAction(event -> {
 
-
             root.setCenter(laggTillProdukt());
+
+        });
+
+        changeProduct.setOnAction(event -> {
+
+            root.setCenter(andraProdukt());
 
         });
 
@@ -147,6 +152,16 @@ public class Main extends Application {
 
         public VBox laggTillProdukt() {
 
+            VBox vBox = new VBox();
+
+            Label test = new Label("TestText");
+
+            vBox.getChildren().add(test);
+
+            return vBox;
+        }
+
+        public VBox andraProdukt() {
             VBox vBox = new VBox();
 
             Label test = new Label("TestText");
