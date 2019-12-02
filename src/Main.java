@@ -164,7 +164,7 @@ public class Main extends Application {
         public VBox andraProdukt() {
             VBox vBox = new VBox();
 
-            Label test = new Label("TestText");
+            Label test = new Label("Nu får ni se");
 
             vBox.getChildren().add(test);
 
