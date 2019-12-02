@@ -3,10 +3,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -147,9 +144,39 @@ public class Main extends Application {
 
             VBox vBox = new VBox();
 
-            Label test = new Label("TestText");
 
-            vBox.getChildren().add(test);
+            GridPane pane = new GridPane();
+            pane.setPadding(new Insets(20,10,10,100));
+            pane.setHgap(20);
+            pane.setVgap(20);
+
+            Label rubrik = new Label("Lägg till produkt");
+            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
+            vBox.setAlignment(Pos.TOP_CENTER);
+
+            pane.add(new Label("Artikelnummer: "),1,3);
+            pane.add(new TextField(),2, 3);
+
+            pane.add(new Label("Artikelnamn:"), 1, 4);
+            pane.add(new TextField(),2, 4);
+
+            pane.add(new Label("Antal:"), 1, 5);
+            pane.add(new TextField(),2, 5);
+
+            pane.add(new Label("Kategori:"), 1, 6);
+            pane.add(new TextField(),2, 6);
+
+            pane.add(new Label("Lagerplats:"), 1, 7);
+            pane.add(new TextField(),2, 7);
+
+
+            Button laggTill = new Button("OK");
+            Button avbryt = new Button("Avbryt");
+            pane.add(laggTill,4,14);
+            pane.add(avbryt,5,14);
+
+
+            vBox.getChildren().addAll(rubrik,pane);
 
             return vBox;
         }
