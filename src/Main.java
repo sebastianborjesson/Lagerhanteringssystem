@@ -85,7 +85,7 @@ public class Main extends Application {
 
     }
 
-    public /*VBox*/ GridPane leftPane() { //Om vi väljer att köra med VBOX då är det koden under.
+    public GridPane leftPane() {
 
 
         GridPane root1 = new GridPane();
@@ -224,11 +224,7 @@ public class Main extends Application {
         public VBox andraProdukt() {
             VBox vBox = new VBox();
 
-            vBox.setId("vBox");
 
-            Label test = new Label("Nu får ni se");
-
-            vBox.getChildren().add(test);
 
             return vBox;
         }
@@ -238,11 +234,36 @@ public class Main extends Application {
 
             vBox.setId("vBox");
 
-            Label sokRuta = new Label("Här kan man söka");
+            GridPane pane = new GridPane();
+            pane.setPadding(new Insets(20,10,10,20));
+            pane.setHgap(45);
+            pane.setVgap(5);
+            pane.setId("gridPane");
 
-            vBox.getChildren().add(sokRuta);
+            Label rubrik = new Label("Sök");
+            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
+            vBox.setAlignment(Pos.TOP_CENTER);
+
+            pane.add(new Label("Artikelnummer: "),0,0);
+            TextField textField = new TextField();
+            pane.add(textField,0, 1);
+
+            pane.add(new Label("Artikelnamn:"), 1, 0);
+            TextField textField1 = new TextField();
+            pane.add(textField1,1, 1);
+
+            pane.add(new Label("Kategori:"), 2, 0);
+            ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
+            kategori.setPrefWidth(150);
+            pane.add(kategori, 2, 1);
+
+            Button sok = new Button("Sök");
+            pane.add(sok,3,1);
+
+            vBox.getChildren().addAll(rubrik, pane);
 
             return vBox;
+
         }
 
         public VBox middlePane() {
