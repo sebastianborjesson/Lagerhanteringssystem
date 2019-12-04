@@ -187,7 +187,7 @@ public class Main extends Application {
             pane.add(new Label("Lagerplats:"), 1, 7);
             TextField textField4 = new TextField();
             pane.add(textField4,2, 7);
-            
+
 
             Button laggTill = new Button("OK");
             Button avbryt = new Button("Avbryt");
@@ -213,7 +213,6 @@ public class Main extends Application {
                 textField.clear();
                 textField1.clear();
                 textField2.clear();
-
                 textField4.clear();
 
             });
@@ -226,9 +225,44 @@ public class Main extends Application {
 
             vBox.setId("vBox");
 
-            Label test = new Label("Nu får ni se");
+            Label rubrik = new Label("Ändra produkt");
+            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
+            vBox.setAlignment(Pos.TOP_CENTER);
 
-            vBox.getChildren().add(test);
+            GridPane pane = new GridPane();
+            pane.setPadding(new Insets(20,10,10,50));
+            pane.setHgap(20);
+            pane.setVgap(20);
+
+            Text artikelnr1 = new Text("Artikelnummer");
+            artikelnr1.setFont(Font.font("Helvetica", FontWeight.BOLD,14));
+            pane.add(artikelnr1, 2, 2);
+            Text artikelnamn1 = new Text("Artikelnamn");
+            artikelnamn1.setFont(Font.font("Helvetica", FontWeight.BOLD,14));
+            pane.add(artikelnamn1, 3, 2);
+            Text kategori = new Text("Kategori");
+            kategori.setFont(Font.font("Helvetica", FontWeight.BOLD,14));
+            pane.add(kategori, 4, 2);
+
+
+            Label artikelnr2 = new Label("202402");
+            artikelnr2.setFont(Font.font("Helvetica", 12));
+            pane.add(artikelnr2, 2, 4);
+            Label artikelnamn2 = new Label("Logitech G402 Hyperion Fury");
+            artikelnamn2.setFont(Font.font("Helvetica", 12));
+            pane.add(artikelnamn2, 3, 4);
+            Label kategori2 = new Label("Mus");
+            kategori2.setFont(Font.font("Helvetica", 12));
+            pane.add(kategori2, 4, 4);
+
+            Button andra = new Button("Ändra");
+            andra.setMaxSize(100, 10);
+            pane.add(andra, 6, 4);
+            Button taBort = new Button("Ta bort");
+            taBort.setMaxSize(100, 10);
+            pane.add(taBort, 7, 4);
+
+            vBox.getChildren().addAll(rubrik, pane);
 
             return vBox;
         }
@@ -261,5 +295,6 @@ public class Main extends Application {
             return vBox;
 
     }
+
 
 }
