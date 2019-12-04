@@ -164,7 +164,9 @@ public class Main extends Application {
             rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
             vBox.setAlignment(Pos.TOP_CENTER);
 
-            pane.add(new Label("Artikelnummer: "),1,3);
+            Label artikelnummer = new Label("Artikelnummer: ");
+            artikelnummer.setPrefWidth(120);
+            pane.add(artikelnummer, 1, 3);
             pane.add(new TextField(),2, 3);
 
             pane.add(new Label("Artikelnamn:"), 1, 4);
