@@ -164,24 +164,28 @@ public class Main extends Application {
             rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
             vBox.setAlignment(Pos.TOP_CENTER);
 
-            Label artikelnummer = new Label("Artikelnummer: ");
-            artikelnummer.setPrefWidth(120);
-            pane.add(artikelnummer, 1, 3);
-            pane.add(new TextField(),2, 3);
+            pane.add(new Label("Artikelnummer: "),1,3);
+            TextField textField = new TextField();
+            pane.add(textField,2, 3);
 
             pane.add(new Label("Artikelnamn:"), 1, 4);
-            pane.add(new TextField(),2, 4);
+            TextField textField1 = new TextField();
+            pane.add(textField1,2, 4);
 
             pane.add(new Label("Antal:"), 1, 5);
-            pane.add(new TextField(),2, 5);
+            TextField textField2 = new TextField();
+            pane.add(textField2,2, 5);
 
             pane.add(new Label("Kategori:"), 1, 6);
             ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
             kategori.setPrefWidth(150);
             pane.add(kategori, 2, 6);
 
+
             pane.add(new Label("Lagerplats:"), 1, 7);
-            pane.add(new TextField(),2, 7);
+            TextField textField4 = new TextField();
+            pane.add(textField4,2, 7);
+
 
 
 
@@ -196,6 +200,22 @@ public class Main extends Application {
             avbryt.setOnAction(event -> {
                 root.setCenter(middlePane());
                 addProduct.getStyleClass().remove("active");
+            });
+
+            laggTill.setOnAction(event -> {
+
+
+                Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+                informationAlert.setTitle("Meddelande");
+                informationAlert.setHeaderText("Produkt tillagd!");
+                informationAlert.showAndWait();
+
+                textField.clear();
+                textField1.clear();
+                textField2.clear();
+
+                textField4.clear();
+
             });
 
             return vBox;
