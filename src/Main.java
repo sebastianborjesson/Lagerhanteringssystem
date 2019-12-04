@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -173,10 +174,13 @@ public class Main extends Application {
             pane.add(new TextField(),2, 5);
 
             pane.add(new Label("Kategori:"), 1, 6);
-            pane.add(new TextField(),2, 6);
+            ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
+            kategori.setPrefWidth(150);
+            pane.add(kategori, 2, 6);
 
             pane.add(new Label("Lagerplats:"), 1, 7);
             pane.add(new TextField(),2, 7);
+
 
 
             Button laggTill = new Button("OK");
