@@ -10,6 +10,10 @@
 	-fx-border-style: solid;
 }
 
+#gridPane {
+	-fx-border-style: solid;
+}
+
 #menuBtn {
 	-fx-background-color: gainsboro;
 
