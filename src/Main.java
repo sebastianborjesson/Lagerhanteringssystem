@@ -164,9 +164,11 @@ public class Main extends Application {
             rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
             vBox.setAlignment(Pos.TOP_CENTER);
 
-            pane.add(new Label("Artikelnummer: "),1,3);
+            Label artikelnummer = new Label("Artikelnummer: ");
+            artikelnummer.setPrefWidth(120);
             TextField textField = new TextField();
             pane.add(textField,2, 3);
+            pane.add(artikelnummer, 1, 3);
 
             pane.add(new Label("Artikelnamn:"), 1, 4);
             TextField textField1 = new TextField();
@@ -185,9 +187,7 @@ public class Main extends Application {
             pane.add(new Label("Lagerplats:"), 1, 7);
             TextField textField4 = new TextField();
             pane.add(textField4,2, 7);
-
-
-
+            
 
             Button laggTill = new Button("OK");
             Button avbryt = new Button("Avbryt");
