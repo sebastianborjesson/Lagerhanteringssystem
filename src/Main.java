@@ -189,6 +189,7 @@ public class Main extends Application {
 
             avbryt.setOnAction(event -> {
                 root.setCenter(middlePane());
+                addProduct.getStyleClass().remove("active");
             });
 
             return vBox;
