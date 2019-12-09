@@ -1,5 +1,3 @@
-package com.sample;
-
 
 public class Anvandare {
 

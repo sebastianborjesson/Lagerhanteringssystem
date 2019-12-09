@@ -301,12 +301,11 @@ public class Main extends Application {
             pane.add(sok,3,1);
 
             ListView<String> listView = new ListView<>();
-            try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerHanteringSystem?useSSL=false", "root", "1234")) {
+            try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringsystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
                 Statement statement = conn.createStatement();
                 ResultSet resultProdukter = statement.executeQuery("SELECT * FROM produkt");
 
                 while (resultProdukter.next()) {
-                    System.out.println(resultProdukter.getString("artikelNamn"));
                     listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
                 }
             } catch (SQLException ex) {
