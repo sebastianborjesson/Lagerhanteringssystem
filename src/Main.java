@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-
+import java.sql.*;
 
 
 public class Main extends Application {
@@ -262,6 +262,8 @@ public class Main extends Application {
             taBort.setMaxSize(100, 10);
             pane.add(taBort, 7, 4);
 
+
+
             vBox.getChildren().addAll(rubrik, pane);
 
             return vBox;
@@ -298,7 +300,20 @@ public class Main extends Application {
             Button sok = new Button("Sök");
             pane.add(sok,3,1);
 
-            vBox.getChildren().addAll(rubrik, pane);
+            ListView<String> listView = new ListView<>();
+            try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerHanteringSystem?useSSL=false", "root", "1234")) {
+                Statement statement = conn.createStatement();
+                ResultSet resultProdukter = statement.executeQuery("SELECT * FROM produkt");
+
+                while (resultProdukter.next()) {
+                    System.out.println(resultProdukter.getString("artikelNamn"));
+                    listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+
+            vBox.getChildren().addAll(rubrik, pane, listView);
 
             return vBox;
 
