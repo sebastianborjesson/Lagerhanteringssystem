@@ -319,6 +319,7 @@ public class Main extends Application {
             try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringsystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
                 Statement statement = conn.createStatement();
                 ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
+                hp.getColumns().clear();
                 hp.getItems().clear();
 
                 while (resultProdukter.next()) {
