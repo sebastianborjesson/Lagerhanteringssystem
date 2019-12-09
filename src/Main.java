@@ -1,10 +1,12 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -29,7 +31,8 @@ public class Main extends Application {
     Button addProduct = new Button("Lägg till produkt");
     Button changeProduct = new Button("Ändra produkt");
     Button search = new Button("Search");
-
+    private TableView<Produkt> hp = new TableView<>();
+    private ObservableList<Produkt> data = FXCollections.observableArrayList();
 
     public static void main(String[] args) {
         launch(args);
@@ -300,19 +303,39 @@ public class Main extends Application {
             Button sok = new Button("Sök");
             pane.add(sok,3,1);
 
-            ListView<String> listView = new ListView<>();
+            //ListView<String> listView = new ListView<>();
+            TableColumn<Produkt, Long> artikelNummer = new TableColumn<>("Artikelnummer");
+            artikelNummer.setMinWidth(150);
+            artikelNummer.setCellValueFactory(new PropertyValueFactory<>("artikelNummer"));
+            TableColumn<Produkt, String> artikelNamn = new TableColumn<>("Artikelnamn");
+            artikelNamn.setMinWidth(150);
+            artikelNamn.setCellValueFactory(new PropertyValueFactory<>("artikelNamn"));
+            TableColumn<Produkt, Long> antal = new TableColumn<>("Antal");
+            antal.setMinWidth(150);
+            antal.setCellValueFactory(new PropertyValueFactory<>("antal"));
+            TableColumn<Kategori, String> kategoriNamn = new TableColumn<>("Kategori");
+            kategoriNamn.setMinWidth(100);
+            kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("namn"));
             try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringsystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
                 Statement statement = conn.createStatement();
-                ResultSet resultProdukter = statement.executeQuery("SELECT * FROM produkt");
+                ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
+                hp.getItems().clear();
 
                 while (resultProdukter.next()) {
-                    listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
+                    Produkt tmp = new Produkt(resultProdukter.getLong("artikelNummer"), resultProdukter.getString("artikelNamn"),
+                            resultProdukter.getLong("antal"));
+                    Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
+                    data.add(tmp);
+                    //data.add(tmp2);
+                    //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
+            hp.setItems(data);
+            hp.getColumns().addAll(artikelNummer, artikelNamn, antal);
 
-            vBox.getChildren().addAll(rubrik, pane, listView);
+            vBox.getChildren().addAll(rubrik, pane, hp);
 
             return vBox;
 

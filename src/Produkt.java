@@ -7,6 +7,15 @@ public class Produkt {
   private String lagerPlats;
   private long kategoriId;
 
+  public Produkt(long artikelNummer, String artikelNamn, long antal) {
+    this.artikelNummer = artikelNummer;
+    this.artikelNamn = artikelNamn;
+    this.antal = antal;
+  }
+
+  public Produkt() {
+
+  }
 
   public long getArtikelNummer() {
     return artikelNummer;

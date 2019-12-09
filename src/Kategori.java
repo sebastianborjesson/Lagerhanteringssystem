@@ -1,9 +1,13 @@
 
-public class Kategori {
+public class Kategori extends Produkt {
 
   private long id;
   private String namn;
 
+  public Kategori(String namn) {
+    super();
+    this.namn = namn;
+  }
 
   public long getId() {
     return id;
