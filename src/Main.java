@@ -149,7 +149,7 @@ public class Main extends Application {
     }
        
 
-        public VBox laggTillProdukt() {
+        public VBox laggTillProdukt() { // Flöde för att lägga till en produkt
 
             VBox vBox = new VBox();
 
