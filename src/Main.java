@@ -1,12 +1,14 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -16,9 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
+import javafx.util.converter.LongStringConverter;
 import java.sql.*;
 
 
@@ -32,6 +33,7 @@ public class Main extends Application {
     Button changeProduct = new Button("Ändra produkt");
     Button search = new Button("Search");
     private TableView<Produkt> hp = new TableView<>();
+    private TableView<Produkt> hp2 = new TableView<>();
     private ObservableList<Produkt> data = FXCollections.observableArrayList();
 
     public static void main(String[] args) {
@@ -47,13 +49,11 @@ public class Main extends Application {
         root.setLeft(leftPane());
         root.setCenter(middlePane());
 
-
         Scene scene = new Scene(root, 900, 600);
         scene.getStylesheets().add("file:styles/theStyle.css");
         primaryStage.setTitle("Lagerhanteringssystem");
         primaryStage.setScene(scene); //Sätter Stagen till scenen jag skapar
         primaryStage.show(); //Visar resultatet
-
     }
 
     public HBox topPane() {
@@ -90,12 +90,10 @@ public class Main extends Application {
 
     public GridPane leftPane() {
 
-
         GridPane root1 = new GridPane();
         root.setId("vBox");
         TitledPane product = new TitledPane();
         product.setText("Produkt");
-
 
         VBox produktKnappar = new VBox();
         produktKnappar.setStyle("-fx-background-color: gainsboro");
@@ -117,13 +115,10 @@ public class Main extends Application {
         knapparUnderTitledPane.setAlignment(Pos.CENTER);
         knapparUnderTitledPane.setPadding(new Insets(10, 10, 10, 10));
 
-
         root1.add(dragspel, 0, 0);
         root1.add(knapparUnderTitledPane, 0, 10);
 
         root1.setStyle("-fx-background-color: gainsboro");
-
-
 
         addProduct.setOnAction(event -> {
             changeProduct.getStyleClass().remove("active");
@@ -150,212 +145,239 @@ public class Main extends Application {
 
         return root1;
     }
-       
 
-        public VBox laggTillProdukt() { // Flöde för att lägga till en produkt
+    public VBox laggTillProdukt() { // Flöde för att lägga till en produkt
 
-            VBox vBox = new VBox();
+        VBox vBox = new VBox();
 
-            vBox.setId("vBox");
+        vBox.setId("vBox");
 
-            GridPane pane = new GridPane();
-            pane.setPadding(new Insets(20,10,10,100));
-            pane.setHgap(20);
-            pane.setVgap(20);
+        GridPane pane = new GridPane();
+        pane.setPadding(new Insets(20,10,10,100));
+        pane.setHgap(20);
+        pane.setVgap(20);
 
-            Label rubrik = new Label("Lägg till produkt");
-            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
-            vBox.setAlignment(Pos.TOP_CENTER);
+        Label rubrik = new Label("Lägg till produkt");
+        rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
+        vBox.setAlignment(Pos.TOP_CENTER);
 
-            Label artikelnummer = new Label("Artikelnummer: ");
-            artikelnummer.setPrefWidth(120);
-            TextField textField = new TextField();
-            pane.add(textField,2, 3);
-            pane.add(artikelnummer, 1, 3);
+        Label artikelnummer = new Label("Artikelnummer: ");
+        artikelnummer.setPrefWidth(120);
+        TextField textField = new TextField();
+        pane.add(textField,2, 3);
+        pane.add(artikelnummer, 1, 3);
 
-            pane.add(new Label("Artikelnamn:"), 1, 4);
-            TextField textField1 = new TextField();
-            pane.add(textField1,2, 4);
+        pane.add(new Label("Artikelnamn:"), 1, 4);
+        TextField textField1 = new TextField();
+        pane.add(textField1,2, 4);
 
-            pane.add(new Label("Antal:"), 1, 5);
-            TextField textField2 = new TextField();
-            pane.add(textField2,2, 5);
+        pane.add(new Label("Antal:"), 1, 5);
+        TextField textField2 = new TextField();
+        pane.add(textField2,2, 5);
 
-            pane.add(new Label("Kategori:"), 1, 6);
-            ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
-            kategori.setPrefWidth(150);
-            pane.add(kategori, 2, 6);
+        pane.add(new Label("Kategori:"), 1, 6);
+        ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
+        kategori.setPrefWidth(150);
+        pane.add(kategori, 2, 6);
 
+        pane.add(new Label("Lagerplats:"), 1, 7);
+        TextField textField4 = new TextField();
+        pane.add(textField4,2, 7);
 
-            pane.add(new Label("Lagerplats:"), 1, 7);
-            TextField textField4 = new TextField();
-            pane.add(textField4,2, 7);
+        Button laggTill = new Button("OK");
+        Button avbryt = new Button("Avbryt");
+        pane.add(laggTill,4,14);
+        pane.add(avbryt,5,14);
 
+        vBox.getChildren().addAll(rubrik,pane);
 
-            Button laggTill = new Button("OK");
-            Button avbryt = new Button("Avbryt");
-            pane.add(laggTill,4,14);
-            pane.add(avbryt,5,14);
+        avbryt.setOnAction(event -> {
+            root.setCenter(middlePane());
+            addProduct.getStyleClass().remove("active");
+        });
 
+        laggTill.setOnAction(event -> {
 
-            vBox.getChildren().addAll(rubrik,pane);
+            Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+            informationAlert.setTitle("Meddelande");
+            informationAlert.setHeaderText("Produkt tillagd!");
+            informationAlert.showAndWait();
 
-            avbryt.setOnAction(event -> {
-                root.setCenter(middlePane());
-                addProduct.getStyleClass().remove("active");
-            });
+            textField.clear();
+            textField1.clear();
+            textField2.clear();
+            textField4.clear();
 
-            laggTill.setOnAction(event -> {
+        });
 
+        return vBox;
+    }
 
-                Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
-                informationAlert.setTitle("Meddelande");
-                informationAlert.setHeaderText("Produkt tillagd!");
-                informationAlert.showAndWait();
+    public VBox andraProdukt() {
+        VBox vBox = new VBox();
 
-                textField.clear();
-                textField1.clear();
-                textField2.clear();
-                textField4.clear();
+        vBox.setId("vBox");
 
-            });
+        Label rubrik = new Label("Ändra produkt");
+        rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
+        vBox.setAlignment(Pos.TOP_CENTER);
 
-            return vBox;
-        }
+        hp2.setEditable(true);
 
-        public VBox andraProdukt() {
-            VBox vBox = new VBox();
+        TableColumn<Produkt, Long> artikelNummer = new TableColumn<>("Artikelnummer");
+        artikelNummer.setMinWidth(150);
+        artikelNummer.setCellValueFactory(new PropertyValueFactory<>("artikelNummer"));
 
-            vBox.setId("vBox");
-
-            Label rubrik = new Label("Ändra produkt");
-            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
-            vBox.setAlignment(Pos.TOP_CENTER);
-
-            GridPane pane = new GridPane();
-            pane.setPadding(new Insets(20,10,10,50));
-            pane.setHgap(20);
-            pane.setVgap(20);
-
-            Text artikelnr1 = new Text("Artikelnummer");
-            artikelnr1.setFont(Font.font("Helvetica", FontWeight.BOLD,14));
-            pane.add(artikelnr1, 2, 2);
-            Text artikelnamn1 = new Text("Artikelnamn");
-            artikelnamn1.setFont(Font.font("Helvetica", FontWeight.BOLD,14));
-            pane.add(artikelnamn1, 3, 2);
-            Text kategori = new Text("Kategori");
-            kategori.setFont(Font.font("Helvetica", FontWeight.BOLD,14));
-            pane.add(kategori, 4, 2);
+        TableColumn<Produkt, String> artikelNamn = new TableColumn<>("Artikelnamn");
+        artikelNamn.setMinWidth(150);
+        artikelNamn.setCellValueFactory(new PropertyValueFactory<Produkt, String >("artikelNamn"));
 
 
-            Label artikelnr2 = new Label("202402");
-            artikelnr2.setFont(Font.font("Helvetica", 12));
-            pane.add(artikelnr2, 2, 4);
-            Label artikelnamn2 = new Label("Logitech G402 Hyperion Fury");
-            artikelnamn2.setFont(Font.font("Helvetica", 12));
-            pane.add(artikelnamn2, 3, 4);
-            Label kategori2 = new Label("Mus");
-            kategori2.setFont(Font.font("Helvetica", 12));
-            pane.add(kategori2, 4, 4);
-
-            Button andra = new Button("Ändra");
-            andra.setMaxSize(100, 10);
-            pane.add(andra, 6, 4);
-            Button taBort = new Button("Ta bort");
-            taBort.setMaxSize(100, 10);
-            pane.add(taBort, 7, 4);
-
-
-
-            vBox.getChildren().addAll(rubrik, pane);
-
-            return vBox;
-        }
-
-        public VBox sokProdukt() {
-            VBox vBox = new VBox();
-
-            vBox.setId("vBox");
-
-            GridPane pane = new GridPane();
-            pane.setPadding(new Insets(20,10,10,20));
-            pane.setHgap(45);
-            pane.setVgap(5);
-            pane.setId("gridPane");
-
-            Label rubrik = new Label("Sök");
-            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
-            vBox.setAlignment(Pos.TOP_CENTER);
-
-            pane.add(new Label("Artikelnummer: "),0,0);
-            TextField textField = new TextField();
-            pane.add(textField,0, 1);
-
-            pane.add(new Label("Artikelnamn:"), 1, 0);
-            TextField textField1 = new TextField();
-            pane.add(textField1,1, 1);
-
-            pane.add(new Label("Kategori:"), 2, 0);
-            ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
-            kategori.setPrefWidth(150);
-            pane.add(kategori, 2, 1);
-
-            Button sok = new Button("Sök");
-            pane.add(sok,3,1);
-
-            //ListView<String> listView = new ListView<>();
-            TableColumn<Produkt, Long> artikelNummer = new TableColumn<>("Artikelnummer");
-            artikelNummer.setMinWidth(150);
-            artikelNummer.setCellValueFactory(new PropertyValueFactory<>("artikelNummer"));
-            TableColumn<Produkt, String> artikelNamn = new TableColumn<>("Artikelnamn");
-            artikelNamn.setMinWidth(150);
-            artikelNamn.setCellValueFactory(new PropertyValueFactory<>("artikelNamn"));
-            TableColumn<Produkt, Long> antal = new TableColumn<>("Antal");
-            antal.setMinWidth(150);
-            antal.setCellValueFactory(new PropertyValueFactory<>("antal"));
-            TableColumn<Kategori, String> kategoriNamn = new TableColumn<>("Kategori");
-            kategoriNamn.setMinWidth(100);
-            kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("namn"));
-            try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringsystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
-                Statement statement = conn.createStatement();
-                ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
-                hp.getColumns().clear();
-                hp.getItems().clear();
-
-                while (resultProdukter.next()) {
-                    Produkt tmp = new Produkt(resultProdukter.getLong("artikelNummer"), resultProdukter.getString("artikelNamn"),
-                            resultProdukter.getLong("antal"));
-                    Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
-                    data.add(tmp);
-                    //data.add(tmp2);
-                    //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
+        TableColumn<Produkt, Long> antal = new TableColumn<>("Antal");
+        antal.setMinWidth(150);
+        antal.setCellValueFactory(new PropertyValueFactory<Produkt, Long>("antal"));
+        antal.setCellFactory(TextFieldTableCell.<Produkt, Long>forTableColumn(new LongStringConverter()));
+        antal.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Produkt, Long>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Produkt, Long> t) {
+                        ((Produkt) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setAntal(t.getNewValue());
+                    }
                 }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+        );
+
+        TableColumn<Produkt, String> lagerPlats = new TableColumn<>("Lagerplats");
+        lagerPlats.setMinWidth(150);
+        lagerPlats.setCellValueFactory(new PropertyValueFactory<Produkt, String >("lagerPlats"));
+        lagerPlats.setCellFactory(TextFieldTableCell.forTableColumn());
+        lagerPlats.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Produkt, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Produkt, String> t) {
+                        ((Produkt) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setLagerPlats(t.getNewValue());
+                    }
+                }
+        );
+
+        TableColumn<Kategori, String> kategoriNamn = new TableColumn<>("Kategori");
+        kategoriNamn.setMinWidth(100);
+        kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("namn"));
+
+        try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringssystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "NewPassword")) {
+            Statement statement = conn.createStatement();
+            ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, produkt.antal, produkt.lagerPlats FROM produkt ORDER BY artikelNamn ASC;");
+            hp2.getColumns().clear();
+            hp2.getItems().clear();
+
+            while (resultProdukter.next()) {
+                Produkt tmp = new Produkt(resultProdukter.getLong("artikelNummer"), resultProdukter.getString("artikelNamn"),
+                        resultProdukter.getLong("antal"), resultProdukter.getString("lagerPlats"));
+                //Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
+                data.add(tmp);
+                //data.add(tmp2);
+                //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
             }
-            hp.setItems(data);
-            hp.getColumns().addAll(artikelNummer, artikelNamn, antal);
-
-            vBox.getChildren().addAll(rubrik, pane, hp);
-
-            return vBox;
-
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
+        hp2.setItems(data);
+        hp2.getColumns().addAll(artikelNummer, artikelNamn, antal, lagerPlats);
 
-        public VBox middlePane() {
+        Button taBort = new Button("Ta bort");
 
-            VBox vBox = new VBox();
-            vBox.setId("vBox");
-            Label rubrik = new Label("Välkommen," + "\n" +  "Nils Nilsson!");
-            rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
-            Image smiley = new Image("file:images/smiley.png");
+        vBox.getChildren().addAll(rubrik, hp2, taBort);
 
-            ImageView visaSmiley = new ImageView(smiley);
+        return vBox;
+    }
 
-            vBox.getChildren().addAll(rubrik, new Text(System.lineSeparator()) , visaSmiley);
-            vBox.setAlignment(Pos.CENTER);
+    public VBox sokProdukt() {
+        VBox vBox = new VBox();
 
-            return vBox;
+        vBox.setId("vBox");
+
+        GridPane pane = new GridPane();
+        pane.setPadding(new Insets(20,10,10,20));
+        pane.setHgap(45);
+        pane.setVgap(5);
+        pane.setId("gridPane");
+
+        Label rubrik = new Label("Sök");
+        rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
+        vBox.setAlignment(Pos.TOP_CENTER);
+
+        pane.add(new Label("Artikelnummer: "),0,0);
+        TextField textField = new TextField();
+        pane.add(textField,0, 1);
+
+        pane.add(new Label("Artikelnamn:"), 1, 0);
+        TextField textField1 = new TextField();
+        pane.add(textField1,1, 1);
+
+        pane.add(new Label("Kategori:"), 2, 0);
+        ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
+        kategori.setPrefWidth(150);
+        pane.add(kategori, 2, 1);
+
+        Button sok = new Button("Sök");
+        pane.add(sok,3,1);
+
+        //ListView<String> listView = new ListView<>();
+        TableColumn<Produkt, Long> artikelNummer = new TableColumn<>("Artikelnummer");
+        artikelNummer.setMinWidth(150);
+        artikelNummer.setCellValueFactory(new PropertyValueFactory<>("artikelNummer"));
+        TableColumn<Produkt, String> artikelNamn = new TableColumn<>("Artikelnamn");
+        artikelNamn.setMinWidth(150);
+        artikelNamn.setCellValueFactory(new PropertyValueFactory<>("artikelNamn"));
+        TableColumn<Produkt, Long> antal = new TableColumn<>("Antal");
+        antal.setMinWidth(150);
+        antal.setCellValueFactory(new PropertyValueFactory<>("antal"));
+        TableColumn<Kategori, String> kategoriNamn = new TableColumn<>("Kategori");
+        kategoriNamn.setMinWidth(100);
+        kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("namn"));
+        try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringssystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "NewPassword")) {
+            Statement statement = conn.createStatement();
+            ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
+            hp.getColumns().clear();
+            hp.getItems().clear();
+
+            while (resultProdukter.next()) {
+                Produkt tmp = new Produkt(resultProdukter.getLong("artikelNummer"), resultProdukter.getString("artikelNamn"),
+                        resultProdukter.getLong("antal"));
+                Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
+                data.add(tmp);
+                //data.add(tmp2);
+                //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        hp.setItems(data);
+        hp.getColumns().addAll(artikelNummer, artikelNamn, antal);
+
+        vBox.getChildren().addAll(rubrik, pane, hp);
+
+        return vBox;
+
+    }
+
+    public VBox middlePane() {
+
+        VBox vBox = new VBox();
+        vBox.setId("vBox");
+        Label rubrik = new Label("Välkommen," + "\n" +  "Nils Nilsson!");
+        rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
+        Image smiley = new Image("file:images/smiley.png");
+
+        ImageView visaSmiley = new ImageView(smiley);
+
+        vBox.getChildren().addAll(rubrik, new Text(System.lineSeparator()) , visaSmiley);
+        vBox.setAlignment(Pos.CENTER);
+
+        return vBox;
 
     }
 

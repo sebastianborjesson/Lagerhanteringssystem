@@ -12,7 +12,12 @@ public class Produkt {
     this.artikelNamn = artikelNamn;
     this.antal = antal;
   }
-
+  public Produkt(long artikelNummer, String artikelNamn, long antal, String lagerPlats) {
+    this.artikelNummer = artikelNummer;
+    this.artikelNamn = artikelNamn;
+    this.antal = antal;
+    this.lagerPlats = lagerPlats;
+  }
   public Produkt() {
 
   }
