@@ -10,12 +10,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -68,7 +67,60 @@ public class Main extends Application {
         primaryStage.setTitle("Lagerhanteringssystem");
         primaryStage.setScene(scene); //Sätter Stagen till scenen jag skapar
         primaryStage.show(); //Visar resultatet
+
+        BorderPane pane = new BorderPane();
+
+        //Nedan följer inloggs koden
+        Label systemName = new Label("Lagerhanteringssystem");
+        systemName.setFont(Font.font("Helvetica", FontWeight.BOLD, 30));
+        systemName.setPadding(new Insets(10));
+
+        VBox inlogg = new VBox();
+        inlogg.setAlignment(Pos.CENTER);
+        inlogg.setSpacing(20);
+        Label username = new Label("Användarnamn");
+        username.setFont(new Font("Helvetica", 20));
+        TextField usernameTextField = new TextField();
+        usernameTextField.setMaxWidth(200);
+
+        Label password = new Label("Lösenord");
+        password.setFont(new Font("Helvetica", 20));
+        PasswordField passwordField = new PasswordField();
+        passwordField.setMaxWidth(200);
+
+        Button loginButton = new Button("Logga in");
+
+        inlogg.getChildren().addAll(username, usernameTextField, password, passwordField, loginButton);
+        pane.setTop(systemName);
+        pane.setCenter(inlogg);
+
+        Scene loginscen = new Scene(pane, 900, 600);
+        primaryStage.setScene(loginscen);
+        primaryStage.show();
+
+        loginButton.setOnAction(event -> {
+            String checkUser = usernameTextField.getText().toString();
+            String checkPassword = passwordField.getText().toString();
+            if (checkUser.equals("Nils") && checkPassword.equals("Nils")) {
+                primaryStage.setScene(scene);
+            } else {
+                Alert wrongPassword = new Alert(Alert.AlertType.ERROR);
+                wrongPassword.setHeaderText("Fel användarnamn eller lösenord");
+                wrongPassword.setContentText("Testa igen");
+                wrongPassword.showAndWait();
+                usernameTextField.clear();
+                passwordField.clear();
+            }
+
+        });
+
+        signOut.setOnAction(event -> {
+            usernameTextField.clear();
+            passwordField.clear();
+            primaryStage.setScene(loginscen);
+        });
     }
+
 
     public HBox topPane() {
 
@@ -101,6 +153,7 @@ public class Main extends Application {
         return top;
 
     }
+
 
     public GridPane leftPane() {
 
@@ -292,6 +345,7 @@ public class Main extends Application {
 
         return vBox;
     }
+
 
     public VBox andraProdukt() {
         VBox vBox = new VBox();
@@ -606,6 +660,8 @@ public class Main extends Application {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, username, password);
     }
+
+
 
 
 }
