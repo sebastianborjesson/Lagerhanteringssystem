@@ -1,18 +1,18 @@
 
 public class Produkt {
 
-  private long artikelNummer;
+  private int artikelNummer;
   private String artikelNamn;
-  private long antal;
+  private int antal;
   private String lagerPlats;
-  private long kategoriId;
+  private int kategoriId;
 
-  public Produkt(long artikelNummer, String artikelNamn, long antal) {
+  public Produkt(int artikelNummer, String artikelNamn, int antal) {
     this.artikelNummer = artikelNummer;
     this.artikelNamn = artikelNamn;
     this.antal = antal;
   }
-  public Produkt(long artikelNummer, String artikelNamn, long antal, String lagerPlats) {
+  public Produkt(int artikelNummer, String artikelNamn, int antal, String lagerPlats) {
     this.artikelNummer = artikelNummer;
     this.artikelNamn = artikelNamn;
     this.antal = antal;
@@ -22,11 +22,11 @@ public class Produkt {
 
   }
 
-  public long getArtikelNummer() {
+  public int getArtikelNummer() {
     return artikelNummer;
   }
 
-  public void setArtikelNummer(long artikelNummer) {
+  public void setArtikelNummer(int artikelNummer) {
     this.artikelNummer = artikelNummer;
   }
 
@@ -40,11 +40,11 @@ public class Produkt {
   }
 
 
-  public long getAntal() {
+  public int getAntal() {
     return antal;
   }
 
-  public void setAntal(long antal) {
+  public void setAntal(int antal) {
     this.antal = antal;
   }
 
@@ -58,11 +58,11 @@ public class Produkt {
   }
 
 
-  public long getKategoriId() {
+  public int getKategoriId() {
     return kategoriId;
   }
 
-  public void setKategoriId(long kategoriId) {
+  public void setKategoriId(int kategoriId) {
     this.kategoriId = kategoriId;
   }
 

@@ -2,7 +2,7 @@
 public class LagerPlats {
 
   private String namn;
-  private long tillganglighet;
+  private int tillganglighet;
 
 
   public String getNamn() {
@@ -14,11 +14,11 @@ public class LagerPlats {
   }
 
 
-  public long getTillganglighet() {
+  public int getTillganglighet() {
     return tillganglighet;
   }
 
-  public void setTillganglighet(long tillganglighet) {
+  public void setTillganglighet(int tillganglighet) {
     this.tillganglighet = tillganglighet;
   }
 

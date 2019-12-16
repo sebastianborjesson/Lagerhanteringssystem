@@ -1,7 +1,7 @@
 
 public class Kategori extends Produkt {
 
-  private long id;
+  private int id;
   private String namn;
 
   public Kategori(String namn) {
@@ -9,11 +9,11 @@ public class Kategori extends Produkt {
     this.namn = namn;
   }
 
-  public long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(int id) {
     this.id = id;
   }
 
