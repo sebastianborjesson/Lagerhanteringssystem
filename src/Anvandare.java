@@ -1,20 +1,29 @@
 
 public class Anvandare {
 
-  private long anstallningsId;
+  private int anstallningsId;
   private String namn;
   private String roll;
   private String losenord;
 
 
-  public long getAnstallningsId() {
+  public Anvandare() {
+  }
+
+  public Anvandare(String namn, String losenord) {
+    this.namn = namn;
+    this.losenord = losenord;
+  }
+
+
+
+  public int getAnstallningsId() {
     return anstallningsId;
   }
 
-  public void setAnstallningsId(long anstallningsId) {
+  public void setAnstallningsId(int anstallningsId) {
     this.anstallningsId = anstallningsId;
   }
-
 
   public String getNamn() {
     return namn;

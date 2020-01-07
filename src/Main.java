@@ -1,3 +1,4 @@
+import com.sun.javafx.scene.control.IntegerField;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Properties;
 
 
@@ -48,6 +51,9 @@ public class Main extends Application {
     private static String username;
     private static String password;
 
+    //Variabler för inlogg
+    private static String checkUser;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -60,7 +66,7 @@ public class Main extends Application {
 
         root.setTop(topPane());
         root.setLeft(leftPane());
-        root.setCenter(middlePane());
+        //root.setCenter(middlePane()); // Flyttat ner denna pga av inloggs namn ska visas
 
         Scene scene = new Scene(root, 900, 600);
         scene.getStylesheets().add("file:styles/theStyle.css");
@@ -99,19 +105,36 @@ public class Main extends Application {
         primaryStage.show();
 
         loginButton.setOnAction(event -> {
-            String checkUser = usernameTextField.getText().toString();
-            String checkPassword = passwordField.getText().toString();
-            if (checkUser.equals("Nils") && checkPassword.equals("Nils")) {
-                primaryStage.setScene(scene);
-            } else {
-                Alert wrongPassword = new Alert(Alert.AlertType.ERROR);
-                wrongPassword.setHeaderText("Fel användarnamn eller lösenord");
-                wrongPassword.setContentText("Testa igen");
-                wrongPassword.showAndWait();
-                usernameTextField.clear();
-                passwordField.clear();
-            }
 
+            try (Connection conn = getConnection()){
+                checkUser = usernameTextField.getText();
+                String checkPassword = passwordField.getText();
+
+                PreparedStatement preparedStatement = conn.prepareStatement("Select anvandare.namn, anvandare.losenord from anvandare where namn = ? and losenord = ?");
+                preparedStatement.setString(1,checkUser);
+                preparedStatement.setString(2,checkPassword);
+                ResultSet rs = preparedStatement.executeQuery();
+
+                if (rs.next()) {
+                    Alert confirmedLogIn = new Alert(Alert.AlertType.INFORMATION);
+                    confirmedLogIn.setHeaderText("Inloggningen lyckades!");
+                    confirmedLogIn.setContentText("Tryck OK för att skickas vidare till startsidan");
+                    confirmedLogIn.showAndWait();
+                    primaryStage.setScene(scene);
+                } else {
+                    Alert wrongPassword = new Alert(Alert.AlertType.ERROR);
+                    wrongPassword.setHeaderText("Fel användarnamn eller lösenord");
+                    wrongPassword.setContentText("Testa igen");
+                    wrongPassword.showAndWait();
+                    usernameTextField.clear();
+                    passwordField.clear();
+                }
+
+                preparedStatement.close();
+                }
+                catch (SQLException e) {
+                System.out.println("Något gick fel: " + e.getMessage());
+            }   root.setCenter(middlePane());
         });
 
         signOut.setOnAction(event -> {
@@ -120,7 +143,6 @@ public class Main extends Application {
             primaryStage.setScene(loginscen);
         });
     }
-
 
     public HBox topPane() {
 
@@ -153,7 +175,6 @@ public class Main extends Application {
         return top;
 
     }
-
 
     public GridPane leftPane() {
 
@@ -576,7 +597,7 @@ public class Main extends Application {
 
         VBox vBox = new VBox();
         vBox.setId("vBox");
-        Label rubrik = new Label("Välkommen," + "\n" +  "Nils Nilsson!");
+        Label rubrik = new Label("Välkommen," + "\n" + checkUser);
         rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
         Image smiley = new Image("file:images/smiley.png");
 
