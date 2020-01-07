@@ -42,9 +42,9 @@ public class Main extends Application {
     Button addProduct = new Button("Lägg till produkt");
     Button changeProduct = new Button("Ändra produkt");
     Button search = new Button("Search");
-    private TableView<Produkt> hp = new TableView<>();
+    private TableView<ProduktKategori> hp = new TableView<>();
     private TableView<Produkt> hp2 = new TableView<>();
-    private ObservableList<Produkt> data = FXCollections.observableArrayList();
+    private ObservableList data = FXCollections.observableArrayList();
 
     //Tre variabler som behövs för databasen
     private static String url;
@@ -340,7 +340,6 @@ public class Main extends Application {
 
                     psLagerPlats.executeUpdate();
 
-
                     Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
                     informationAlert.setTitle("Meddelande");
                     informationAlert.setHeaderText("Produkt tillagd!");
@@ -378,7 +377,7 @@ public class Main extends Application {
 
         hp2.setEditable(true);
 
-        TableColumn<Produkt, Long> artikelNummer = new TableColumn<>("Artikelnummer");
+        TableColumn<Produkt, Integer> artikelNummer = new TableColumn<>("Artikelnummer");
         artikelNummer.setMinWidth(150);
         artikelNummer.setCellValueFactory(new PropertyValueFactory<>("artikelNummer"));
 
@@ -451,7 +450,6 @@ public class Main extends Application {
         kategoriNamn.setMinWidth(100);
         kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("namn"));
 
-
         try(Connection conn = getConnection()) {                              //DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringsystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234"
             Statement statement = conn.createStatement();
             ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, produkt.antal, produkt.lagerPlats FROM produkt ORDER BY artikelNamn ASC;");
@@ -471,7 +469,6 @@ public class Main extends Application {
         }
         hp2.setItems(data);
         hp2.getColumns().addAll(artikelNummer, artikelNamn, antal, lagerPlats);
-
         Button taBort = new Button("Ta bort");
 
         taBort.setOnAction(event -> {
@@ -514,9 +511,7 @@ public class Main extends Application {
             }
 
         });
-
         vBox.getChildren().addAll(rubrik, hp2, taBort);
-
         return vBox;
     }
 
@@ -543,49 +538,93 @@ public class Main extends Application {
         pane.add(textField1,1, 1);
 
         pane.add(new Label("Kategori:"), 2, 0);
-        ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Stol"));
+        ChoiceBox kategori = new ChoiceBox(FXCollections.observableArrayList("Bildskärm", "Tangentbord", "Mus", "Datastol"));
         kategori.setPrefWidth(150);
         pane.add(kategori, 2, 1);
 
         Button sok = new Button("Sök");
         pane.add(sok,3,1);
 
-        TableColumn<Produkt, Integer> artikelNummer = new TableColumn<>("Artikelnummer");
+        TableColumn<ProduktKategori, Long> artikelNummer = new TableColumn<>("Artikelnummer");
         artikelNummer.setMinWidth(150);
         artikelNummer.setCellValueFactory(new PropertyValueFactory<>("artikelNummer"));
-        TableColumn<Produkt, String> artikelNamn = new TableColumn<>("Artikelnamn");
+        TableColumn<ProduktKategori, String> artikelNamn = new TableColumn<>("Artikelnamn");
         artikelNamn.setMinWidth(150);
         artikelNamn.setCellValueFactory(new PropertyValueFactory<>("artikelNamn"));
-        TableColumn<Produkt, Integer> antal = new TableColumn<>("Antal");
+        TableColumn<ProduktKategori, Long> antal = new TableColumn<>("Antal");
         antal.setMinWidth(150);
         antal.setCellValueFactory(new PropertyValueFactory<>("antal"));
-        /*
-        TableColumn<Kategori, String> kategoriNamn = new TableColumn<>("Kategori");
+        TableColumn<ProduktKategori, String> kategoriNamn = new TableColumn<>("Kategori");
         kategoriNamn.setMinWidth(100);
-        kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("namn"));
+        kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("Kategori"));
+        sok.setOnAction(event -> {
+            try (Connection conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost/lagerHanteringSystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
+                System.out.println("Connected");
 
-         */
+                PreparedStatement ps;
+                if (!textField.getText().isEmpty()) {
+                    ps = conn.prepareStatement("SELECT * FROM produkt_kategori WHERE artikelNummer LIKE ?");
+                    ps.setString(1,textField.getText() + "%");
+                    ResultSet resultProdukter2 = ps.executeQuery();
+                    hp.getColumns().clear();
+                    hp.getItems().clear();
+                    while (resultProdukter2.next()) {
+                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getLong("artikelNummer"), resultProdukter2.getString("artikelNamn"),
+                                resultProdukter2.getLong("antal"), resultProdukter2.getString("Kategori"));
+                        data.add(tmps);
+                    }
+                }
+                else if (!textField1.getText().isEmpty()) {
+                    ps = conn.prepareStatement("SELECT * FROM produkt_kategori WHERE artikelNamn LIKE ?");
+                    ps.setString(1,textField1.getText() + "%");
+                    ResultSet resultProdukter2 = ps.executeQuery();
+                    hp.getColumns().clear();
+                    hp.getItems().clear();
+                    while (resultProdukter2.next()) {
+                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getLong("artikelNummer"), resultProdukter2.getString("artikelNamn"),
+                                resultProdukter2.getLong("antal"), resultProdukter2.getString("Kategori"));
+                        data.add(tmps);
+                    }
+                }
+                else if (!kategori.getSelectionModel().getSelectedItem().toString().equals(null)) {
+                    ps = conn.prepareStatement("SELECT * FROM produkt_kategori WHERE Kategori LIKE ?");
+                    ps.setString(1,kategori.getSelectionModel().getSelectedItem().toString() + "%");
+                    ResultSet resultProdukter2 = ps.executeQuery();
+                    hp.getColumns().clear();
+                    hp.getItems().clear();
+                    while (resultProdukter2.next()) {
+                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getLong("artikelNummer"), resultProdukter2.getString("artikelNamn"),
+                                resultProdukter2.getLong("antal"), resultProdukter2.getString("Kategori"));
+                        data.add(tmps);
+                    }
+                }
 
 
-        try(Connection conn = getConnection()){     /*DriverManager.getConnection( "jdbc:mysql://localhost/lagerhanteringsystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234"*/
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            hp.setItems(data);
+            hp.getColumns().addAll(artikelNummer, artikelNamn, antal, kategoriNamn);
+        });
+        try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerHanteringSystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
             Statement statement = conn.createStatement();
-            ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
+            ResultSet resultProdukter = statement.executeQuery("SELECT * FROM produkt_kategori");
             hp.getColumns().clear();
             hp.getItems().clear();
 
             while (resultProdukter.next()) {
-                Produkt tmp = new Produkt(resultProdukter.getInt("artikelNummer"), resultProdukter.getString("artikelNamn"),
-                        resultProdukter.getInt("antal"));
-               // Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
-                data.add(tmp);
-               // data.add(tmp2);
-                //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
+                ProduktKategori tmp = new ProduktKategori(resultProdukter.getLong("artikelNummer"), resultProdukter.getString("artikelNamn"),
+                        resultProdukter.getLong("antal"), resultProdukter.getString("Kategori"));
+
+                data.addAll(tmp);
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
         hp.setItems(data);
-        hp.getColumns().addAll(artikelNummer, artikelNamn, antal);
+        hp.getColumns().addAll(artikelNummer, artikelNamn, antal, kategoriNamn);
 
         vBox.getChildren().addAll(rubrik, pane, hp);
 
@@ -594,20 +633,15 @@ public class Main extends Application {
     }
 
     public VBox middlePane() {
-
         VBox vBox = new VBox();
         vBox.setId("vBox");
         Label rubrik = new Label("Välkommen," + "\n" + checkUser);
         rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
         Image smiley = new Image("file:images/smiley.png");
-
         ImageView visaSmiley = new ImageView(smiley);
-
         vBox.getChildren().addAll(rubrik, new Text(System.lineSeparator()) , visaSmiley);
         vBox.setAlignment(Pos.CENTER);
-
         return vBox;
-
     }
 
     private HashMap<Integer, String> getKategori() {
