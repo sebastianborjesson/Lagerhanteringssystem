@@ -1,26 +1,26 @@
 
 public class ProduktKategori {
 
-  private long artikelNummer;
+  private int artikelNummer;
   private String artikelNamn;
-  private long antal;
+  private int antal;
   private String kategori;
 
   public ProduktKategori() {
   }
 
-  public ProduktKategori(long artikelNummer, String artikelNamn, long antal, String kategori) {
+  public ProduktKategori(int artikelNummer, String artikelNamn, int antal, String kategori) {
     this.artikelNummer = artikelNummer;
     this.artikelNamn = artikelNamn;
     this.antal = antal;
     this.kategori = kategori;
   }
 
-  public long getArtikelNummer() {
+  public int getArtikelNummer() {
     return artikelNummer;
   }
 
-  public void setArtikelNummer(long artikelNummer) {
+  public void setArtikelNummer(int artikelNummer) {
     this.artikelNummer = artikelNummer;
   }
 
@@ -34,11 +34,11 @@ public class ProduktKategori {
   }
 
 
-  public long getAntal() {
+  public int getAntal() {
     return antal;
   }
 
-  public void setAntal(long antal) {
+  public void setAntal(int antal) {
     this.antal = antal;
   }
 

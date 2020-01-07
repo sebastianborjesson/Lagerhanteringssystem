@@ -45,6 +45,8 @@ public class Main extends Application {
     private TableView<ProduktKategori> hp = new TableView<>();
     private TableView<Produkt> hp2 = new TableView<>();
     private ObservableList data = FXCollections.observableArrayList();
+    private ObservableList data2 = FXCollections.observableArrayList();
+
 
     //Tre variabler som behövs för databasen
     private static String url;
@@ -545,22 +547,20 @@ public class Main extends Application {
         Button sok = new Button("Sök");
         pane.add(sok,3,1);
 
-        TableColumn<ProduktKategori, Long> artikelNummer = new TableColumn<>("Artikelnummer");
+        TableColumn<ProduktKategori, Integer> artikelNummer = new TableColumn<>("Artikelnummer");
         artikelNummer.setMinWidth(150);
         artikelNummer.setCellValueFactory(new PropertyValueFactory<>("artikelNummer"));
         TableColumn<ProduktKategori, String> artikelNamn = new TableColumn<>("Artikelnamn");
         artikelNamn.setMinWidth(150);
         artikelNamn.setCellValueFactory(new PropertyValueFactory<>("artikelNamn"));
-        TableColumn<ProduktKategori, Long> antal = new TableColumn<>("Antal");
+        TableColumn<ProduktKategori, Integer> antal = new TableColumn<>("Antal");
         antal.setMinWidth(150);
         antal.setCellValueFactory(new PropertyValueFactory<>("antal"));
         TableColumn<ProduktKategori, String> kategoriNamn = new TableColumn<>("Kategori");
         kategoriNamn.setMinWidth(100);
         kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("Kategori"));
         sok.setOnAction(event -> {
-            try (Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost/lagerHanteringSystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
-                System.out.println("Connected");
+            try (Connection conn = getConnection()) {
 
                 PreparedStatement ps;
                 if (!textField.getText().isEmpty()) {
@@ -570,9 +570,9 @@ public class Main extends Application {
                     hp.getColumns().clear();
                     hp.getItems().clear();
                     while (resultProdukter2.next()) {
-                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getLong("artikelNummer"), resultProdukter2.getString("artikelNamn"),
-                                resultProdukter2.getLong("antal"), resultProdukter2.getString("Kategori"));
-                        data.add(tmps);
+                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getInt("artikelNummer"), resultProdukter2.getString("artikelNamn"),
+                                resultProdukter2.getInt("antal"), resultProdukter2.getString("Kategori"));
+                        data2.add(tmps);
                     }
                 }
                 else if (!textField1.getText().isEmpty()) {
@@ -582,9 +582,9 @@ public class Main extends Application {
                     hp.getColumns().clear();
                     hp.getItems().clear();
                     while (resultProdukter2.next()) {
-                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getLong("artikelNummer"), resultProdukter2.getString("artikelNamn"),
-                                resultProdukter2.getLong("antal"), resultProdukter2.getString("Kategori"));
-                        data.add(tmps);
+                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getInt("artikelNummer"), resultProdukter2.getString("artikelNamn"),
+                                resultProdukter2.getInt("antal"), resultProdukter2.getString("Kategori"));
+                        data2.add(tmps);
                     }
                 }
                 else if (!kategori.getSelectionModel().getSelectedItem().toString().equals(null)) {
@@ -594,9 +594,9 @@ public class Main extends Application {
                     hp.getColumns().clear();
                     hp.getItems().clear();
                     while (resultProdukter2.next()) {
-                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getLong("artikelNummer"), resultProdukter2.getString("artikelNamn"),
-                                resultProdukter2.getLong("antal"), resultProdukter2.getString("Kategori"));
-                        data.add(tmps);
+                        ProduktKategori tmps = new ProduktKategori(resultProdukter2.getInt("artikelNummer"), resultProdukter2.getString("artikelNamn"),
+                                resultProdukter2.getInt("antal"), resultProdukter2.getString("Kategori"));
+                        data2.add(tmps);
                     }
                 }
 
@@ -605,7 +605,7 @@ public class Main extends Application {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            hp.setItems(data);
+            hp.setItems(data2);
             hp.getColumns().addAll(artikelNummer, artikelNamn, antal, kategoriNamn);
         });
         try(Connection conn = DriverManager.getConnection( "jdbc:mysql://localhost/lagerHanteringSystem?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "1234")) {
@@ -615,8 +615,8 @@ public class Main extends Application {
             hp.getItems().clear();
 
             while (resultProdukter.next()) {
-                ProduktKategori tmp = new ProduktKategori(resultProdukter.getLong("artikelNummer"), resultProdukter.getString("artikelNamn"),
-                        resultProdukter.getLong("antal"), resultProdukter.getString("Kategori"));
+                ProduktKategori tmp = new ProduktKategori(resultProdukter.getInt("artikelNummer"), resultProdukter.getString("artikelNamn"),
+                        resultProdukter.getInt("antal"), resultProdukter.getString("Kategori"));
 
                 data.addAll(tmp);
             }
