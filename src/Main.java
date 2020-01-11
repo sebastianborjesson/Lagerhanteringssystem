@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Properties;
 
 
@@ -548,19 +549,28 @@ public class Main extends Application {
                     PreparedStatement psTaBort = conn.prepareStatement("DELETE FROM produkt WHERE artikelNummer = ?");
                     psTaBort.setInt(1, tableView2.getSelectionModel().getSelectedItem().getArtikelNummer());
 
-                    psTaBort.executeUpdate();
 
                     PreparedStatement psLagerPlats = conn.prepareStatement("UPDATE lagerplats SET tillganglighet = 0 WHERE namn = ?");
                     psLagerPlats.setString(1, tableView2.getSelectionModel().getSelectedItem().getLagerPlats());
 
                     psLagerPlats.executeUpdate();
 
-                    Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+                    Alert informationAlert = new Alert(Alert.AlertType.CONFIRMATION);
                     informationAlert.setTitle("Meddelande");
-                    informationAlert.setHeaderText("Din valda produkt kommer att tas bort!");
-                    informationAlert.showAndWait();
+                    informationAlert.setHeaderText("Är du säker att du vill ta bort produkten?");
+                    //informationAlert.showAndWait();
 
-                    tableView2.getItems().remove(tableView2.getSelectionModel().getSelectedItem());
+                    Optional<ButtonType> result = informationAlert.showAndWait();
+                    ButtonType button = result.orElse(ButtonType.CANCEL);
+
+                    if (result.get() == ButtonType.OK) {
+                        System.out.println("Ok pressed");
+                        tableView2.getItems().remove(tableView2.getSelectionModel().getSelectedItem());
+                        psTaBort.executeUpdate();
+                    } else {
+                        System.out.println("canceled");
+                    }
+
                 }
 
             } catch (SQLException e) {
