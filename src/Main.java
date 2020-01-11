@@ -140,21 +140,21 @@ public class Main extends Application {
                 System.out.println("Något gick fel: " + e.getMessage());
             }   root.setCenter(middlePane());
 
-            /* GAMMAL KOD FÖR LOGIN
-            String checkUser = usernameTextField.getText().toString();
-            String checkPassword = passwordField.getText().toString();
-            if (checkUser.equals("Nils") && checkPassword.equals("Nils")) {
-                primaryStage.setScene(scene);
-            } else {
-                Alert wrongPassword = new Alert(Alert.AlertType.ERROR);
-                wrongPassword.setHeaderText("Fel användarnamn eller lösenord");
-                wrongPassword.setContentText("Testa igen");
-                wrongPassword.showAndWait();
-                usernameTextField.clear();
-                passwordField.clear();
-            }
+           /* GAMMAL KOD FÖR LOGIN
+           String checkUser = usernameTextField.getText().toString();
+           String checkPassword = passwordField.getText().toString();
+           if (checkUser.equals("Nils") && checkPassword.equals("Nils")) {
+               primaryStage.setScene(scene);
+           } else {
+               Alert wrongPassword = new Alert(Alert.AlertType.ERROR);
+               wrongPassword.setHeaderText("Fel användarnamn eller lösenord");
+               wrongPassword.setContentText("Testa igen");
+               wrongPassword.showAndWait();
+               usernameTextField.clear();
+               passwordField.clear();
+           }
 
-             */
+            */
 
         });
 
@@ -444,16 +444,16 @@ public class Main extends Application {
                         }
                     }
 
-                    /* GAMMAL KOD FÖR ATT LÄGGA Till PRODUKT SOM FUNKADE EJ
-                    if(hmKategori.containsValue(comboBoxKategori.getSelectionModel().getSelectedItem())) {
-                        for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
-                            int valueKey = entry.getKey();
-                            psProduct.setInt(5, valueKey);
-                        }
+                   /* GAMMAL KOD FÖR ATT LÄGGA Till PRODUKT SOM FUNKADE EJ
+                   if(hmKategori.containsValue(comboBoxKategori.getSelectionModel().getSelectedItem())) {
+                       for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
+                           int valueKey = entry.getKey();
+                           psProduct.setInt(5, valueKey);
+                       }
 
-                    }
+                   }
 
-                     */
+                    */
 
                     psProduct.executeUpdate();
 
@@ -471,13 +471,13 @@ public class Main extends Application {
                     comboBoxLagerPlats.getItems().clear();
                     comboBoxLagerPlats.getItems().addAll(getLagerplats());
 
-                    /* FELSÖKNING för att skriva ut vilka lagerplatser som visas efter insättning
-                    for(String str: getLagerplats()) {
-                        System.out.println(str);
-                    }
+                   /* FELSÖKNING för att skriva ut vilka lagerplatser som visas efter insättning
+                   for(String str: getLagerplats()) {
+                       System.out.println(str);
+                   }
 
 
-                     */
+                    */
                     artikelNmr.clear();
                     artikelNamn.clear();
                     antal.clear();
@@ -552,18 +552,18 @@ public class Main extends Application {
                                 t.getTablePosition().getRow())
                         ).setLagerPlats(t.getNewValue());
 
-                        /* EVENTUELL KOD FöR ATT KUNNA ÄNDRA LAGERPLATS
-                        try(Connection conn = getConnection()) {
+                       /* EVENTUELL KOD FöR ATT KUNNA ÄNDRA LAGERPLATS
+                       try(Connection conn = getConnection()) {
 
-                            PreparedStatement psLagerPlats = conn.prepareStatement("UPDATE lagerplats SET antal = ? WHERE artikelNummer = ?");
-                            psAntal.setInt(1, hp2.getSelectionModel().getSelectedItem().getAntal());
-                            psAntal.setInt(2, hp2.getSelectionModel().getSelectedItem().getArtikelNummer());
-                            psAntal.executeUpdate();
+                           PreparedStatement psLagerPlats = conn.prepareStatement("UPDATE lagerplats SET antal = ? WHERE artikelNummer = ?");
+                           psAntal.setInt(1, hp2.getSelectionModel().getSelectedItem().getAntal());
+                           psAntal.setInt(2, hp2.getSelectionModel().getSelectedItem().getArtikelNummer());
+                           psAntal.executeUpdate();
 
-                        } catch (SQLException e) {
-                            e.getMessage();
-                        }
-                        */
+                       } catch (SQLException e) {
+                           e.getMessage();
+                       }
+                       */
 
                     }
                 }
@@ -802,12 +802,12 @@ public class Main extends Application {
         Label rubrik = new Label("Lägg till kategori");
         rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
 
-        /*
-        Label lblKategoriID = new Label("Kategori ID:");
-        TextField kategoriID = new TextField();
-        pane.add(lblKategoriID, 0, 1);
-        pane.add(kategoriID, 1, 1);
-        */
+       /*
+       Label lblKategoriID = new Label("Kategori ID:");
+       TextField kategoriID = new TextField();
+       pane.add(lblKategoriID, 0, 1);
+       pane.add(kategoriID, 1, 1);
+       */
 
         Label lblKategoriNamn = new Label("Kategori namn:");
         TextField kategoriNamn = new TextField();
@@ -859,15 +859,15 @@ public class Main extends Application {
                     ps.setString(2, kategoriNamn.getText());
 
 
-                    /*
-                    for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
-                        Integer valueKey = entry.getKey();
-                        String value = comboBoxKategori.getSelectionModel().getSelectedItem();
-                        if(entry.getValue().equals(value)) {
-                        psProduct.setInt(5, valueKey);
-                    }
-                    }
-                    */
+                   /*
+                   for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
+                       Integer valueKey = entry.getKey();
+                       String value = comboBoxKategori.getSelectionModel().getSelectedItem();
+                       if(entry.getValue().equals(value)) {
+                       psProduct.setInt(5, valueKey);
+                   }
+                   }
+                   */
                     ps.executeUpdate();
                     hmKategori = getKategori();
 
@@ -990,13 +990,13 @@ public class Main extends Application {
 
         pane.add(new Label("Kategori:"), 2, 0);
 
-        /*
-        ComboBox<String> comboBoxKategori = new ComboBox<>();
-        for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
-            String value = entry.getValue();
-            comboBoxKategori.getItems().addAll(value);
-        }
-        */
+       /*
+       ComboBox<String> comboBoxKategori = new ComboBox<>();
+       for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
+           String value = entry.getValue();
+           comboBoxKategori.getItems().addAll(value);
+       }
+       */
         ChoiceBox<String> choiceBoxKategori = new ChoiceBox<>();
         for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
             String value = entry.getValue();
@@ -1021,25 +1021,25 @@ public class Main extends Application {
         kategoriNamn.setMinWidth(100);
         kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("Kategori"));
 
-        /*
-        try(Connection conn = getConnection()){
-            Statement statement = conn.createStatement();
-            ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
-            tableView1.getColumns().clear();
-            tableView1.getItems().clear();
+       /*
+       try(Connection conn = getConnection()){
+           Statement statement = conn.createStatement();
+           ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
+           tableView1.getColumns().clear();
+           tableView1.getItems().clear();
 
-            while (resultProdukter.next()) {
-                Produkt tmp = new Produkt(resultProdukter.getInt("artikelNummer"), resultProdukter.getString("artikelNamn"),
-                        resultProdukter.getInt("antal"));
-               // Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
-                observableList1.add(tmp);
-               // data.add(tmp2);
-                //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-         */
+           while (resultProdukter.next()) {
+               Produkt tmp = new Produkt(resultProdukter.getInt("artikelNummer"), resultProdukter.getString("artikelNamn"),
+                       resultProdukter.getInt("antal"));
+              // Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
+               observableList1.add(tmp);
+              // data.add(tmp2);
+               //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
+           }
+       } catch (SQLException ex) {
+           System.out.println(ex.getMessage());
+       }
+        */
 
         tableView1.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -1191,7 +1191,5 @@ public class Main extends Application {
         return DriverManager.getConnection(url, username, password);
     }
 
-
-
-
 }
+

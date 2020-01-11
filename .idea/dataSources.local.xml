@@ -11,7 +11,10 @@
       <user-name>root</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="lagerHanteringSystem" />
+          <node kind="schema">
+            <name qname="Lagersystem" />
+            <name qname="lagerHanteringSystem" />
+          </node>
         </introspection-scope>
       </schema-mapping>
     </data-source>

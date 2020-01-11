@@ -1,3 +1,4 @@
+
 public class ProduktKategori {
 
         private int artikelNummer;
@@ -51,5 +52,3 @@ public class ProduktKategori {
         }
 
 }
-
-

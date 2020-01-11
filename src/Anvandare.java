@@ -22,7 +22,6 @@ public class Anvandare {
     this.anstallningsId = anstallningsId;
   }
 
-
   public String getNamn() {
     return namn;
   }
