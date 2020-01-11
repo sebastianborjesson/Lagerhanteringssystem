@@ -9,6 +9,11 @@ public class Kategori extends Produkt {
     this.namn = namn;
   }
 
+  public Kategori(int id, String namn) {
+    this.id = id;
+    this.namn = namn;
+  }
+
   public int getId() {
     return id;
   }
