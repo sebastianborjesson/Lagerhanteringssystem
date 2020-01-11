@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,24 +9,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
-import javafx.util.converter.LongStringConverter;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 
@@ -55,7 +49,6 @@ public class Main extends Application {
 
     HashMap<Integer, String> hmKategori;
 
-
     //Tre variabler som behövs för databasen
     private static String url;
     private static String username;
@@ -74,7 +67,6 @@ public class Main extends Application {
 
         root.setTop(topPane());
         root.setLeft(leftPane());
-        //root.setCenter(middlePane());
 
         Scene scene = new Scene(root, 1000, 600);
         scene.getStylesheets().add("file:styles/theStyle.css");
@@ -140,22 +132,6 @@ public class Main extends Application {
                 System.out.println("Något gick fel: " + e.getMessage());
             }   root.setCenter(middlePane());
 
-           /* GAMMAL KOD FÖR LOGIN
-           String checkUser = usernameTextField.getText().toString();
-           String checkPassword = passwordField.getText().toString();
-           if (checkUser.equals("Nils") && checkPassword.equals("Nils")) {
-               primaryStage.setScene(scene);
-           } else {
-               Alert wrongPassword = new Alert(Alert.AlertType.ERROR);
-               wrongPassword.setHeaderText("Fel användarnamn eller lösenord");
-               wrongPassword.setContentText("Testa igen");
-               wrongPassword.showAndWait();
-               usernameTextField.clear();
-               passwordField.clear();
-           }
-
-            */
-
         });
 
         signOut.setOnAction(event -> {
@@ -201,7 +177,6 @@ public class Main extends Application {
         return top;
 
     }
-
 
     public GridPane leftPane() {
 
@@ -444,17 +419,6 @@ public class Main extends Application {
                         }
                     }
 
-                   /* GAMMAL KOD FÖR ATT LÄGGA Till PRODUKT SOM FUNKADE EJ
-                   if(hmKategori.containsValue(comboBoxKategori.getSelectionModel().getSelectedItem())) {
-                       for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
-                           int valueKey = entry.getKey();
-                           psProduct.setInt(5, valueKey);
-                       }
-
-                   }
-
-                    */
-
                     psProduct.executeUpdate();
 
                     PreparedStatement psLagerPlats = conn.prepareStatement("UPDATE lagerplats SET tillganglighet = 1 WHERE namn = ?");
@@ -471,13 +435,6 @@ public class Main extends Application {
                     comboBoxLagerPlats.getItems().clear();
                     comboBoxLagerPlats.getItems().addAll(getLagerplats());
 
-                   /* FELSÖKNING för att skriva ut vilka lagerplatser som visas efter insättning
-                   for(String str: getLagerplats()) {
-                       System.out.println(str);
-                   }
-
-
-                    */
                     artikelNmr.clear();
                     artikelNamn.clear();
                     antal.clear();
@@ -552,19 +509,6 @@ public class Main extends Application {
                                 t.getTablePosition().getRow())
                         ).setLagerPlats(t.getNewValue());
 
-                       /* EVENTUELL KOD FöR ATT KUNNA ÄNDRA LAGERPLATS
-                       try(Connection conn = getConnection()) {
-
-                           PreparedStatement psLagerPlats = conn.prepareStatement("UPDATE lagerplats SET antal = ? WHERE artikelNummer = ?");
-                           psAntal.setInt(1, hp2.getSelectionModel().getSelectedItem().getAntal());
-                           psAntal.setInt(2, hp2.getSelectionModel().getSelectedItem().getArtikelNummer());
-                           psAntal.executeUpdate();
-
-                       } catch (SQLException e) {
-                           e.getMessage();
-                       }
-                       */
-
                     }
                 }
         );
@@ -594,21 +538,13 @@ public class Main extends Application {
         Button taBort = new Button("Ta bort");
 
         taBort.setOnAction(event -> {
-
             try(Connection conn = getConnection()) {
-
-
                 if(tableView2.getSelectionModel().getSelectedItem() == null) {
-
                     Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
                     informationAlert.setTitle("Meddelande!");
                     informationAlert.setHeaderText("Du måste välja en produkt att ta bort!");
                     informationAlert.showAndWait();
-
-
                 } else {
-
-
                     PreparedStatement psTaBort = conn.prepareStatement("DELETE FROM produkt WHERE artikelNummer = ?");
                     psTaBort.setInt(1, tableView2.getSelectionModel().getSelectedItem().getArtikelNummer());
 
@@ -625,7 +561,6 @@ public class Main extends Application {
                     informationAlert.showAndWait();
 
                     tableView2.getItems().remove(tableView2.getSelectionModel().getSelectedItem());
-
                 }
 
             } catch (SQLException e) {
@@ -672,18 +607,14 @@ public class Main extends Application {
         });
 
         lpLaggTill.setOnAction(event -> {
-
             try(Connection conn = getConnection()) {
-
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 if (lagerPlatsNamn.getText().isEmpty()) {
                     errorAlert.setTitle("Meddelande");
                     errorAlert.setHeaderText("Problem");
                     errorAlert.setContentText("Du måste skriva in ett namn för lagerplatsen!");
                     errorAlert.showAndWait();
-
                 } else {
-
                     PreparedStatement ps = conn.prepareStatement("INSERT INTO lagerplats VALUES (?, ?)");
                     ps.setString(1, lagerPlatsNamn.getText());
                     ps.setInt(2, 0);
@@ -706,7 +637,6 @@ public class Main extends Application {
 
         return vBox;
     }
-
 
     public VBox taBortLagerplats() {
         VBox vBox = new VBox();
@@ -738,7 +668,6 @@ public class Main extends Application {
                 LagerPlats tmp = new LagerPlats(resultLagerplats.getString("namn"), resultLagerplats.getInt("tillganglighet"));
 
                 observableList3.add(tmp);
-
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -749,18 +678,13 @@ public class Main extends Application {
         Button taBort = new Button("Ta bort");
 
         taBort.setOnAction(event -> {
-
             try(Connection conn = getConnection()) {
-
                 if(tableView3.getSelectionModel().getSelectedItem() == null) {
-
                     Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
                     informationAlert.setTitle("Meddelande!");
                     informationAlert.setHeaderText("Du måste välja en lagerplats att ta bort!");
                     informationAlert.showAndWait();
-
                 } else {
-
                     PreparedStatement psTaBort = conn.prepareStatement("DELETE FROM lagerplats WHERE namn = ?");
                     psTaBort.setString(1, tableView3.getSelectionModel().getSelectedItem().getNamn());
 
@@ -772,7 +696,6 @@ public class Main extends Application {
                     informationAlert.showAndWait();
 
                     tableView3.getItems().remove(tableView3.getSelectionModel().getSelectedItem());
-
                 }
 
             } catch (SQLException e) {
@@ -802,13 +725,6 @@ public class Main extends Application {
         Label rubrik = new Label("Lägg till kategori");
         rubrik.setFont(Font.font("Helvetica", FontWeight.BOLD,40));
 
-       /*
-       Label lblKategoriID = new Label("Kategori ID:");
-       TextField kategoriID = new TextField();
-       pane.add(lblKategoriID, 0, 1);
-       pane.add(kategoriID, 1, 1);
-       */
-
         Label lblKategoriNamn = new Label("Kategori namn:");
         TextField kategoriNamn = new TextField();
         pane.add(lblKategoriNamn, 0, 1);
@@ -828,9 +744,7 @@ public class Main extends Application {
         });
 
         kgLaggTill.setOnAction(event -> {
-
             try(Connection conn = getConnection()) {
-
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 if (kategoriNamn.getText().isEmpty()) {
                     errorAlert.setTitle("Meddelande");
@@ -857,17 +771,6 @@ public class Main extends Application {
                     PreparedStatement ps = conn.prepareStatement("INSERT INTO kategori VALUES (?, ?)");
                     ps.setInt(1, id);
                     ps.setString(2, kategoriNamn.getText());
-
-
-                   /*
-                   for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
-                       Integer valueKey = entry.getKey();
-                       String value = comboBoxKategori.getSelectionModel().getSelectedItem();
-                       if(entry.getValue().equals(value)) {
-                       psProduct.setInt(5, valueKey);
-                   }
-                   }
-                   */
                     ps.executeUpdate();
                     hmKategori = getKategori();
 
@@ -916,9 +819,7 @@ public class Main extends Application {
 
             while (resultKategori.next()) {
                 Kategori tmp = new Kategori(resultKategori.getInt(1), resultKategori.getString(2));
-
                 observableList4.add(tmp);
-
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -929,18 +830,13 @@ public class Main extends Application {
         Button taBort = new Button("Ta bort");
 
         taBort.setOnAction(event -> {
-
             try(Connection conn = getConnection()) {
-
                 if(tableView4.getSelectionModel().getSelectedItem() == null) {
-
                     Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
                     informationAlert.setTitle("Meddelande!");
                     informationAlert.setHeaderText("Du måste välja en kategori att ta bort!");
                     informationAlert.showAndWait();
-
                 } else {
-
                     PreparedStatement psTaBort = conn.prepareStatement("DELETE FROM kategori WHERE id = ?");
                     psTaBort.setInt(1, tableView4.getSelectionModel().getSelectedItem().getId());
 
@@ -952,7 +848,6 @@ public class Main extends Application {
                     informationAlert.showAndWait();
 
                     tableView4.getItems().remove(tableView4.getSelectionModel().getSelectedItem());
-
                 }
 
             } catch (SQLException e) {
@@ -989,14 +884,6 @@ public class Main extends Application {
         pane.add(textField1,1, 1);
 
         pane.add(new Label("Kategori:"), 2, 0);
-
-       /*
-       ComboBox<String> comboBoxKategori = new ComboBox<>();
-       for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
-           String value = entry.getValue();
-           comboBoxKategori.getItems().addAll(value);
-       }
-       */
         ChoiceBox<String> choiceBoxKategori = new ChoiceBox<>();
         for (HashMap.Entry<Integer, String> entry : hmKategori.entrySet()){
             String value = entry.getValue();
@@ -1021,32 +908,10 @@ public class Main extends Application {
         kategoriNamn.setMinWidth(100);
         kategoriNamn.setCellValueFactory(new PropertyValueFactory<>("Kategori"));
 
-       /*
-       try(Connection conn = getConnection()){
-           Statement statement = conn.createStatement();
-           ResultSet resultProdukter = statement.executeQuery("SELECT produkt.artikelNummer, produkt.artikelNamn, kategori.namn, produkt.antal FROM kategori, produkt WHERE produkt.kategoriID=kategori.id ORDER BY artikelNamn ASC;");
-           tableView1.getColumns().clear();
-           tableView1.getItems().clear();
-
-           while (resultProdukter.next()) {
-               Produkt tmp = new Produkt(resultProdukter.getInt("artikelNummer"), resultProdukter.getString("artikelNamn"),
-                       resultProdukter.getInt("antal"));
-              // Kategori tmp2 = new Kategori(resultProdukter.getString("namn"));
-               observableList1.add(tmp);
-              // data.add(tmp2);
-               //listView.getItems().addAll(resultProdukter.getString("artikelNamn"));
-           }
-       } catch (SQLException ex) {
-           System.out.println(ex.getMessage());
-       }
-        */
-
         tableView1.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         sok.setOnAction(event ->{
-
             try (Connection conn = getConnection()) {
-
                 PreparedStatement ps;
                 if (!textField.getText().isEmpty()) {
                     ps = conn.prepareStatement("SELECT * FROM produkt_kategori WHERE artikelNummer LIKE ?");
@@ -1085,8 +950,6 @@ public class Main extends Application {
                     }
                 }
 
-
-
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -1112,27 +975,21 @@ public class Main extends Application {
         tableView1.setItems(observableList1);
         tableView1.getColumns().addAll(artikelNummer, artikelNamn, antal, kategoriNamn);
 
-
         vBox.getChildren().addAll(rubrik, pane, tableView1);
 
         return vBox;
-
     }
 
     private HashMap<Integer, String> getKategori() {
 
         HashMap<Integer, String> listKategorier = new HashMap<>();
-
         try(Connection conn = getConnection()) {
-
             Statement kategoriStatement = conn.createStatement();
-
             ResultSet resultKategori = kategoriStatement.executeQuery("SELECT * FROM kategori");
 
             while (resultKategori.next()) {
                 listKategorier.put(resultKategori.getInt("id"), resultKategori.getString("namn"));
             }
-
         } catch (SQLException e) {
             System.out.println("Something went wrong..... " + e.getMessage());
         }
@@ -1141,15 +998,10 @@ public class Main extends Application {
     }
 
     private ArrayList<String> getLagerplats() {
-
         ArrayList<String> listLP = new ArrayList<>();
-
         try(Connection conn = getConnection()) {
-
             Statement lagerPLatsStatement = conn.createStatement();
-
             ResultSet resultLP = lagerPLatsStatement.executeQuery("SELECT namn FROM lagerplats WHERE tillganglighet = 0;");
-
             while (resultLP.next()) {
                 listLP.add(resultLP.getString("namn"));
             }
