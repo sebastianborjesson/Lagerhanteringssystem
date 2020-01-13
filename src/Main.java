@@ -49,6 +49,7 @@ public class Main extends Application {
     private ObservableList<Kategori> observableList4 = FXCollections.observableArrayList();
 
     HashMap<Integer, String> hmKategori;
+    ArrayList<String> alLagerplats;
 
     //Tre variabler som behövs för databasen
     private static String url;
@@ -585,6 +586,9 @@ public class Main extends Application {
     }
 
     public VBox laggTillLagerPlats() {
+
+        alLagerplats = getLagerplats();
+
         VBox vBox = new VBox();
         vBox.setId("vBox");
         vBox.setAlignment(Pos.TOP_CENTER);
@@ -624,7 +628,13 @@ public class Main extends Application {
                     errorAlert.setHeaderText("Problem");
                     errorAlert.setContentText("Du måste skriva in ett namn för lagerplatsen!");
                     errorAlert.showAndWait();
-                } else {
+                } else if (alLagerplats.contains(lagerPlatsNamn.getText())) {
+                    errorAlert.setTitle("Meddelande");
+                    errorAlert.setHeaderText("Problem");
+                    errorAlert.setContentText("Den lagerplatsen finns redan");
+                    errorAlert.showAndWait();
+                }
+                else {
                     PreparedStatement ps = conn.prepareStatement("INSERT INTO lagerplats VALUES (?, ?)");
                     ps.setString(1, lagerPlatsNamn.getText());
                     ps.setInt(2, 0);
